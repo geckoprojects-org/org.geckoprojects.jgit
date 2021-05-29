@@ -1,0 +1,14 @@
+-buildpath: \
+	org.eclipse.jgit,\
+	org.eclipse.jgit.http.server,\
+	org.osgi.service.http.whiteboard;version='1.1',\
+	org.osgi.service.component.annotations,\
+	org.apache.felix.metatype,\
+	org.osgi.service.metatype.annotations,\
+	org.apache.felix.http.servlet-api,\
+	org.apache.felix.http.whiteboard,\
+	org.osgi.framework,\
+	org.osgi.service.useradmin,\
+	org.osgi.service.cm
+-privatepackage: org.geckoprojects.jgit.core
+Bundle-Version: 0.0.1-SNAPSHOT

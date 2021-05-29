@@ -25,4 +25,7 @@
 
 ##  All Project Deps
 dependencies.http.client:\
-	biz.aQute:biz.aQute.gogo.commands.provider:1.7.0
+	biz.aQute:biz.aQute.gogo.commands.provider:1.7.0,\
+	org.eclipse.jgit:org.eclipse.jgit:5.11.1.202105131744-r,\
+	org.eclipse.jgit:org.eclipse.jgit.http.server:5.11.1.202105131744-r,\
+	com.googlecode.javaewah:JavaEWAH:1.1.12
