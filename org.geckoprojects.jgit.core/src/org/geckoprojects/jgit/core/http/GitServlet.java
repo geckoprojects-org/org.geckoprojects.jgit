@@ -1,4 +1,4 @@
-package org.geckoprojects.jgit.core;
+package org.geckoprojects.jgit.core.http;
 
 import java.io.IOException;
 

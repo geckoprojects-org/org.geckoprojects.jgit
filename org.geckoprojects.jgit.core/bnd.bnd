@@ -10,5 +10,5 @@
 	org.osgi.framework,\
 	org.osgi.service.useradmin,\
 	org.osgi.service.cm
--privatepackage: org.geckoprojects.jgit.core
+-privatepackage: org.geckoprojects.jgit.core*
 Bundle-Version: 0.0.1-SNAPSHOT

@@ -17,7 +17,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(service = Repository.class, configurationPid = Constants.PID_REPOSITORY_FILE,scope = ServiceScope.SINGLETON)
-public class GitFileRepository extends FileRepository {
+public class GitFileRepository extends FileRepository implements Named{
 
 	enum InitType {
 
@@ -38,9 +38,12 @@ public class GitFileRepository extends FileRepository {
 		boolean mustExist();
 	}
 
+	private Config config;
+
 	@Activate
 	public GitFileRepository(Config config) throws Exception {
 		super(to(config));
+		this.config=config;
 		incrementOpen();
 
 	}
@@ -54,6 +57,11 @@ public class GitFileRepository extends FileRepository {
 		return new FileRepositoryBuilder().setGitDir(Path.of(config.gitDir()).toFile()).setMustExist(config.mustExist())
 				.setup();
 
+	}
+
+	@Override
+	public String getName() {
+		return config.repository_name();
 	}
 
 }

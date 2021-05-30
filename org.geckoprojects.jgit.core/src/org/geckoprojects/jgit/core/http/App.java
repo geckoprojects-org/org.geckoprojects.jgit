@@ -1,4 +1,4 @@
-package org.geckoprojects.jgit.core;
+package org.geckoprojects.jgit.core.http;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.geckoprojects.jgit.core.Constants;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 

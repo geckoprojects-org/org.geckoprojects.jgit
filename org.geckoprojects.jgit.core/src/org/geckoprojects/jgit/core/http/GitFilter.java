@@ -1,4 +1,4 @@
-package org.geckoprojects.jgit.core;
+package org.geckoprojects.jgit.core.http;
 
 import java.io.IOException;
 import java.util.Map;
@@ -19,6 +19,7 @@ import org.eclipse.jgit.transport.ServiceMayNotContinueException;
 import org.eclipse.jgit.transport.resolver.RepositoryResolver;
 import org.eclipse.jgit.transport.resolver.ServiceNotAuthorizedException;
 import org.eclipse.jgit.transport.resolver.ServiceNotEnabledException;
+import org.geckoprojects.jgit.core.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -30,27 +31,42 @@ import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardFilterName;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardFilterPattern;
-import org.osgi.service.useradmin.UserAdmin;
 
 @Component(service = javax.servlet.Filter.class)
 @HttpWhiteboardFilterName(GitFilter.NAME)
 @HttpWhiteboardFilterPattern("/*")
 //@HttpWhiteboardFilterServlet(GitServlet.NAME)
-@HttpWhiteboardContextSelect("("+ HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME + "=" + AppServletContext.NAME + ")")
+@HttpWhiteboardContextSelect("(" + HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME + "=" + AppServletContext.NAME
+		+ ")")
 public class GitFilter extends org.eclipse.jgit.http.server.GitFilter
 		implements RepositoryResolver<HttpServletRequest> {
 
 	public static final String NAME = "GitFilter";
 	Map<Repository, Map<String, Object>> repositorys = new ConcurrentHashMap<>();
 
-	@Reference
-	UserAdmin userAdmin; 
-	
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	void bindHttpUploadPackFactory(HttpUploadPackFactory httpUploadPackFactory) {
+		setUploadPackFactory(httpUploadPackFactory);
+	}
+
+	void unbindHttpUploadPackFactory(HttpUploadPackFactory httpUploadPackFactory) {
+		setUploadPackFactory(null);
+	}
+
+	@Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+	void bindHttpRecievePackFactory(HttpReceivePackFactory httpReceivePackFactory) {
+		setReceivePackFactory(httpReceivePackFactory);
+	}
+
+	void unbindHttpRecievePackFactory(HttpReceivePackFactory httpReceivePackFactory) {
+		setUploadPackFactory(null);
+	}
+
 	public GitFilter() {
 		setRepositoryResolver(this);
 	}
 
-	@Reference(cardinality = ReferenceCardinality.MULTIPLE,policy = ReferencePolicy.DYNAMIC)
+	@Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
 	public void bindRepository(Repository repository, Map<String, Object> map) {
 		repositorys.compute(repository, (k, v) -> map);
 		repositorys.put(repository, map);
@@ -68,7 +84,7 @@ public class GitFilter extends org.eclipse.jgit.http.server.GitFilter
 
 	@Activate
 	public void activate() {
-
+		System.out.println(1);
 	}
 
 	@Modified
@@ -98,7 +114,7 @@ public class GitFilter extends org.eclipse.jgit.http.server.GitFilter
 		return r;
 
 	}
-	
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {

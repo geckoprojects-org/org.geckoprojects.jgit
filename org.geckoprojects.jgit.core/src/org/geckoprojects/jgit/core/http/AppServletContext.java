@@ -1,4 +1,4 @@
-package org.geckoprojects.jgit.core;
+package org.geckoprojects.jgit.core.http;
 
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;

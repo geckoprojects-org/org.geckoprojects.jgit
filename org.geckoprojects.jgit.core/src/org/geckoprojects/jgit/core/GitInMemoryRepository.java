@@ -14,7 +14,7 @@ import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
 @Designate(ocd = Config.class, factory = true)
 @Component(service = Repository.class, configurationPid = Constants.PID_REPOSITORY_INMEMORY, scope = ServiceScope.SINGLETON)
-public class GitInMemoryRepository extends InMemoryRepository {
+public class GitInMemoryRepository extends InMemoryRepository implements Named{
 
 	enum InitType {
 
@@ -31,9 +31,12 @@ public class GitInMemoryRepository extends InMemoryRepository {
 		InitType initType() default InitType.EXISTING_OR_CREATE_NEW;
 	}
 
+	private Config config;
+
 	@Activate
 	public GitInMemoryRepository(Config config) throws Exception {
 		super(to(config));
+		this.config=config;
 		switch (config.initType()) {
 		case CREATE_NEW_OR_THROW:
 			if (exists()) {
@@ -82,4 +85,8 @@ public class GitInMemoryRepository extends InMemoryRepository {
 
 	}
 
+	@Override
+	public String getName() {
+		return config.repository_name();
+	}
 }
